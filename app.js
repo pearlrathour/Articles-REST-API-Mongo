@@ -10,13 +10,12 @@ con();
 
 app.route("/articles")
     .get(function (req, res) {
-        console.log("get 1")
         Articles.find()
             .then(function (foundarticles) {
                 res.send(foundarticles);
             })
             .catch(function (error) {
-                res.send(err);
+                res.send(error);
                 console.error("Error fetching tasks:", error);
             });
     })
@@ -41,12 +40,10 @@ app.route("/articles")
     });
 
 
-///// Requestes for a specific article
+/////////////     Requestes for a specific article    ///////////////
 
 app.route('/articles/:name')
     .get(function (req, res) {
-        console.log(req.params.name)
-        console.log("get 2")
         Articles.findOne({ name: req.params.name })
             .then(function (foundarticles) {
                 if (foundarticles)
@@ -55,30 +52,58 @@ app.route('/articles/:name')
                     res.send("No article matching the title");
             })
             .catch(function (error) {
-                res.send(err);
+                res.send(error);
                 console.error("Error fetching tasks:", error);
             });
     })
 
-    // .put(function (req, res) {
-    //     console.log(req.params.name)
-    //     console.log("update 2")
-    //     Articles.update(
-    //         {name: req.params.name},
-    //         {name: req.body.name},
-    //         {content: req.body.content}
-    //     5)
-    //         .then(function (foundarticles) {
-    //             if (foundarticles)
-    //                 res.send(foundarticles);
-    //             else
-    //                 res.send("No article matching the title");
-    //         })
-    //         .catch(function (error) {
-    //             res.send(err);
-    //             console.error("Error fetching tasks:", error);
-    //         });
-    // });
+    .put(function (req, res) {
+        // ModelName.update(
+        //     {cond},
+        //     {updates},
+        //     {overwrite: true}
+        // )
+        
+        Articles.findOneAndUpdate(
+            {name: req.params.name},
+            {name: req.body.name, content: req.body.content}
+        )
+        .then(function () {
+            res.send("Put");
+        })
+        .catch(function (error) {
+            res.send(error);
+            console.error("Put error:", error);
+        });
+    })
+    
+    // Update a specific field in a specific document
+    .patch(function (req, res) {
+        Articles.findOneAndUpdate(
+            {name: req.params.name},
+            {$set: req.body}
+        )
+        .then(function () {
+            res.send("Patch");
+        })
+        .catch(function (error) {
+            res.send(error);
+            console.error("Patch error:", error);
+        });
+    })
+    
+    .delete(function (req, res) {
+        Articles.deleteOne(
+            {name: req.params.name},
+        )
+        .then(function () {
+            res.send("Delete");
+        })
+        .catch(function (error) {
+            res.send(error);
+            console.error("Delete error:", error);
+        });
+    });
 
 app.listen(process.env.Port, function () {
     console.log("Server started on port 4000");
