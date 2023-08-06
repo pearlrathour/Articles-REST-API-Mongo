@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 const {endpoint} = require('../config');
 
-const dburl = process.env.DB_URL;
+const DB_URL = process.env.DB_URL;
 
 function con() { 
-    mongoose.connect(dburl).then(() => {
+    mongoose.connect(DB_URL).then(() => {
         console.log("Conn succ");
     }).catch((err) => console.log("No conn", err));
 }

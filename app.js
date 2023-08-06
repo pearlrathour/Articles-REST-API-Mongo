@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { con, Articles } = require('./models/articles');
-const { port } = require('./config');
+const { Port } = require('./config');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
